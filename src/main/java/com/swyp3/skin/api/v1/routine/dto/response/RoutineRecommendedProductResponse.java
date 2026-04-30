@@ -13,6 +13,9 @@ public record RoutineRecommendedProductResponse(
         @Schema(description = "제품명", example = "시카 진정 토너")
         String name,
 
+        @Schema(description = "가격", example = "17,000")
+        int price,
+
         @Schema(description = "상품 원래 카테고리", example = "TONER")
         ProductCategory productCategory,
 
