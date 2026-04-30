@@ -2,6 +2,7 @@ package com.swyp3.skin.recommendation.product.service;
 
 import com.swyp3.skin.domain.common.enums.IngredientGroup;
 import com.swyp3.skin.domain.product.domain.entity.Product;
+import com.swyp3.skin.domain.product.domain.enums.ProductCategory;
 import com.swyp3.skin.domain.product.repository.ProductGroupScoreRepository;
 import com.swyp3.skin.domain.product.repository.ProductRepository;
 import com.swyp3.skin.domain.skinresult.domain.entity.SkinResultGroupScore;
@@ -12,9 +13,11 @@ import com.swyp3.skin.recommendation.product.dto.ProductSupply;
 import com.swyp3.skin.recommendation.product.dto.RecommendedProduct;
 import com.swyp3.skin.recommendation.product.mapper.ProductVectorMapper;
 import com.swyp3.skin.recommendation.product.policy.ProductFilterPolicy;
+import jdk.jfr.Category;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -74,13 +77,33 @@ public class ProductRecommendationService {
                         p -> p
                 ));
 
-        return scores.stream()
-                .sorted(Comparator.comparingDouble(ProductScore::getScore).reversed())
-                .limit(15)
-                .map(score -> new RecommendedProduct(
-                        productMap.get(score.getProductId()),
-                        score.getScore()
-                ))
+        // 카테고리별 그룹핑
+        Map<ProductCategory, List<ProductScore>> grouped = scores.stream()
+                .collect(Collectors.groupingBy(s ->
+                        productMap.get(s.getProductId()).getCategory()
+                ));
+
+        // 카테고리별 5개로
+        int perCategoryLimit = 5;
+
+        List<RecommendedProduct> merged = new ArrayList<>();
+
+        for (Map.Entry<ProductCategory, List<ProductScore>> entry : grouped.entrySet()) {
+
+            List<RecommendedProduct> topByCategory = entry.getValue().stream()
+                    .sorted(Comparator.comparingDouble(ProductScore::getScore).reversed())
+                    .limit(perCategoryLimit)
+                    .map(score -> new RecommendedProduct(
+                            productMap.get(score.getProductId()),
+                            score.getScore()
+                    ))
+                    .toList();
+
+            merged.addAll(topByCategory);
+        }
+
+        return merged.stream()
+                .sorted(Comparator.comparingDouble(RecommendedProduct::getScore).reversed())
                 .toList();
     }
 }
