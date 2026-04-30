@@ -76,6 +76,7 @@ public class ProductRecommendationService {
 
         return scores.stream()
                 .sorted(Comparator.comparingDouble(ProductScore::getScore).reversed())
+                .limit(15)
                 .map(score -> new RecommendedProduct(
                         productMap.get(score.getProductId()),
                         score.getScore()
