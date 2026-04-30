@@ -96,6 +96,7 @@ public class RoutineQueryService {
         return new RoutineRecommendedProductResponse(
                 routineProduct.getProduct().getId(),
                 routineProduct.getProduct().getName(),
+                routineProduct.getProduct().getPrice(),
                 routineProduct.getProduct().getCategory(),
                 routineProduct.getProduct().getImageUrl(),
                 routineProduct.getRoutineStepCategory()

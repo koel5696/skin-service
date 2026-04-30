@@ -46,16 +46,19 @@ public class RoutineController {
 
     @Operation(
             summary = "맞춤형 루틴 추천",
-            description = "최신 피부 진단 결과를 기반으로 사용자의 AM/PM 루틴 미리보기 정보를 반환"
+            description = "기준 피부 진단 결과를 기반으로 사용자의 AM/PM 루틴 미리보기 정보를 반환"
     )
     @GetMapping("/recommendation")
     public ApiResponse<RoutineRecommendationWithTokenResponse> getRecommendation(
-            @AuthenticationPrincipal CustomUserDetails userDetails
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestParam(required = false) Long skinResultId
     ) {
         Long userId = userDetails.userId();
-        SkinResult latestSkinResult = skinResultService.getLatestByUserId(userId);
-        List<RecommendedProduct> recommended = productRecommendationService.recommend(latestSkinResult.getId());
-        RoutineRecommendationResponse response = routineRecommendationService.recommend(recommended, latestSkinResult);
+        SkinResult skinResult = (skinResultId != null)
+                ? skinResultService.getSkinResultById(skinResultId, userId)
+                : skinResultService.getLatestByUserId(userId);
+        List<RecommendedProduct> recommended = productRecommendationService.recommend(skinResult.getId());
+        RoutineRecommendationResponse response = routineRecommendationService.recommend(recommended, skinResult);
         String previewToken = routinePreviewCacheService.put(new RoutinePreviewCacheValue(userId, response));
 
         return ApiResponse.ok(new RoutineRecommendationWithTokenResponse(response, previewToken));
