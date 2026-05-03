@@ -18,9 +18,13 @@ public record SkinUxProfile(
         @Schema(description = "루틴 설명")
         String routineSummary,
 
-        @Schema(description = "루틴 원형 내용물")
+        @Schema(description = "루틴 원형 내용물") //? 이게 왜 루틴 원형 내용물이지
         List<String> concerns,
 
         @Schema(description = "필요 성분 모음")
         List<IngredientType> ingredients
-) {}
+) {
+        public static boolean isPrimaryConcernInnerDryness(SkinUxProfile uxProfile) {
+                return !uxProfile.concerns().isEmpty() && "속건조".equals(uxProfile.concerns().get(0));
+        }
+}
