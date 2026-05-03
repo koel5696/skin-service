@@ -1,6 +1,7 @@
 package com.swyp3.skin.domain.routine.service;
 
 import com.swyp3.skin.api.v1.routine.dto.response.*;
+import com.swyp3.skin.domain.product.domain.enums.ProductCategory;
 import com.swyp3.skin.domain.product.domain.entity.Product;
 import com.swyp3.skin.domain.routine.domain.enums.RoutineStepCategory;
 import com.swyp3.skin.domain.routine.domain.enums.RoutineType;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static com.swyp3.skin.recommendation.ux.SkinUxProfile.isPrimaryConcernInnerDryness;
 
 @Service
 @RequiredArgsConstructor
@@ -48,7 +51,9 @@ public class RoutineRecommendationService {
                 if(categoryProducts == null || categoryProducts.isEmpty()) {
                     throw new RoutineException(RoutineErrorCode.ROUTINE_DATA_INCOMPLETE);
                 }
-                routineProducts.add(toProductResponse(stepCategoryEntry.getValue().get(0), stepCategoryEntry.getKey()));
+                RecommendedProduct selectedProduct =
+                        selectRecommendedProduct(categoryProducts, stepCategoryEntry.getKey(), uxProfile);
+                routineProducts.add(toProductResponse(selectedProduct, stepCategoryEntry.getKey()));
             }
             RoutineSectionResponse sectionResponse = new RoutineSectionResponse(
                     routineTypeEntry.getKey(),
@@ -71,6 +76,17 @@ public class RoutineRecommendationService {
                 amRoutine,
                 pmRoutine
         );
+    }
+
+    private RecommendedProduct selectRecommendedProduct(List<RecommendedProduct> categoryProducts, RoutineStepCategory routineStepCategory,
+            SkinUxProfile uxProfile) {
+        if (routineStepCategory == RoutineStepCategory.MOISTURIZER && isPrimaryConcernInnerDryness(uxProfile)) {
+            return categoryProducts.stream()
+                    .filter(product -> product.getProduct().getCategory() == ProductCategory.CREAM)
+                    .findFirst()
+                    .orElse(categoryProducts.get(0));
+        }
+        return categoryProducts.get(0);
     }
 
     private RoutineRecommendedProductResponse toProductResponse(
