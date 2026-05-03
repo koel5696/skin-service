@@ -44,6 +44,8 @@ public class ProductController {
                 cursor,
                 size
         );
+
+
         return ApiResponse.ok(response);
     }
 
