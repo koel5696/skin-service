@@ -52,7 +52,7 @@ public class RoutineCompositionService {
     }
 
     private Map<RoutineType, Map<RoutineStepCategory, List<RecommendedProduct>>> groupProductsByStepCategory(
-            Map<RoutineType, List<RecommendedProduct>> productsByRoutineType
+            Map<RoutineType, List<RecommendedProduct>> productsByRoutineType // RoutineType >> am pm 상품이 하나도 없는 경우도 만들어야함
     ) {
         Map<RoutineType, Map<RoutineStepCategory, List<RecommendedProduct>>> productsByStepCategory =
                 new EnumMap<>(RoutineType.class);
@@ -64,13 +64,16 @@ public class RoutineCompositionService {
                             ignored -> new EnumMap<>(RoutineStepCategory.class)
                     );
 
+            for(RoutineStepCategory routineStepCategory : RoutineStepCategory.values()) {
+                productsForStepCategory.put(routineStepCategory, new ArrayList<>());
+            }
+
             for (RecommendedProduct recommendedProduct : routineTypeEntry.getValue()) {
                 Product product = recommendedProduct.getProduct();
                 RoutineStepCategory routineStepCategory =
                         RoutineStepCategory.from(product.getCategory());
 
-                productsForStepCategory.computeIfAbsent(routineStepCategory, ignored -> new ArrayList<>())
-                        .add(recommendedProduct);
+                productsForStepCategory.get(routineStepCategory).add(recommendedProduct);
             }
         }
         return productsByStepCategory;
