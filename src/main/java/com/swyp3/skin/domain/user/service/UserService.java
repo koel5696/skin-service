@@ -83,6 +83,7 @@ public class UserService {
         List<RoutineGroup> routineGroups =
                 routineGroupService.getTop4ByUserId(userId);
 
+
         return MyPageResponse.from(userOauth, userProfile, skinResults, routineGroups);
 
     }

@@ -13,6 +13,10 @@ public interface SkinResultRepository extends JpaRepository<SkinResult,Long> {
 
     List<SkinResult> findTop4ByUser_IdOrderByCreatedAtDesc(Long userId);
 
+    List<SkinResult> findByUser_IdOrderByIdDesc(Long userId, org.springframework.data.domain.Pageable pageable);
+
+    List<SkinResult> findByUser_IdAndIdLessThanOrderByIdDesc(Long userId, Long id, org.springframework.data.domain.Pageable pageable);
+
     Optional<SkinResult> findByIdAndUser_id(Long skinResultId,Long userId);
 
     long countByUser(User user);
