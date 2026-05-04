@@ -36,16 +36,17 @@ public class RoutineCompositionService {
             List<RecommendedProduct> recommendedProducts
     ) {
         Map<RoutineType, List<RecommendedProduct>> productsByRoutineType = new EnumMap<>(RoutineType.class);
+        for (RoutineType routineType : RoutineType.values()) {
+            productsByRoutineType.put(routineType, new ArrayList<>()); // 미리 초기화
+        }
 
         for (RecommendedProduct recommendedProduct : recommendedProducts) {
             ProductUsageTime usageTime = recommendedProduct.getProduct().getProductUsageTime();
             if(usageTime == null) {
                 throw new RoutineException(RoutineErrorCode.PRODUCT_USAGE_TIME_NOT_DEFINE);
             }
-
             for (RoutineType routineType : RoutineType.from(usageTime)) {
-                productsByRoutineType.computeIfAbsent(routineType, ignored -> new ArrayList<>())
-                        .add(recommendedProduct);
+                productsByRoutineType.get(routineType).add(recommendedProduct);
             }
         }
         return productsByRoutineType;
