@@ -32,7 +32,6 @@ public class UserService {
     private final UserProfileRepository userProfileRepository;
     private final SkinResultService skinResultService;
     private final RoutineGroupService routineGroupService;
-    private final SkinProfileService skinProfileService;
 
 
     public User findOrCreateUser(OAuth2UserInfo userInfo, AuthProvider provider) {
@@ -83,10 +82,10 @@ public class UserService {
         List<SkinResult> skinResults =
                 skinResultService.getTop3ByUserId(userId);
 
-        List<RoutineGroup> routineGroups =
-                routineGroupService.getTop4ByUserId(userId);
+        RoutineGroup routineGroup =
+                routineGroupService.getLatestByUserId(userId);
 
-        return MyPageResponse.from(userOauth, userProfile, skinResults, routineGroups);
+        return MyPageResponse.from(userOauth, userProfile, skinResults, routineGroup);
 
     }
 

@@ -21,14 +21,14 @@ public record MyPageResponse(
         @Schema(description = "최근 피부 진단 결과 목록",example = "진단 시각: 2026-04-03 14:30:00")
         List<SkinResultSummary> skinResults,
 
-        @Schema(description = "최근 루틴 목록",example = "루틴명 : 아침 루틴, 진단 시각: 2026-04-03 14:30:00")
-        List<RoutineGroupSummary> routines
+        @Schema(description = "최근 루틴",example = "루틴명 : 아침 루틴, 진단 시각: 2026-04-03 14:30:00")
+        RoutineGroupSummary routine
 ) {
 
     public static MyPageResponse from(
             UserOauth userOauth, UserProfile userProfile,
             List<SkinResult> skinResults,
-            List<RoutineGroup> routineGroups
+            RoutineGroup routineGroup
     ) {
         return new MyPageResponse(
                 UserInfo.from(
@@ -39,10 +39,7 @@ public record MyPageResponse(
                 skinResults.stream()
                         .map(skinResult -> SkinResultSummary.from(skinResult, skinResult.getTypeName()))
                         .toList(),
-                routineGroups.stream()
-                        .map(RoutineGroupSummary::from)
-                        .toList()
-
+                RoutineGroupSummary.from(routineGroup)
         );
     }
 }
