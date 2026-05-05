@@ -11,7 +11,7 @@ public interface SkinResultRepository extends JpaRepository<SkinResult,Long> {
 
     Optional<SkinResult> findTopByUser_IdOrderByCreatedAtDesc(Long userId);
 
-    List<SkinResult> findTop4ByUser_IdOrderByCreatedAtDesc(Long userId);
+    List<SkinResult> findTop3ByUser_IdOrderByCreatedAtDesc(Long userId);
 
     List<SkinResult> findByUser_IdOrderByIdDesc(Long userId, org.springframework.data.domain.Pageable pageable);
 

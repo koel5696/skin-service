@@ -41,7 +41,7 @@ public class UserController {
         return ApiResponse.ok();
     }
 
-    @Operation(summary = "회원 탈퇴", description = "사용자 계정을 삭제 처리합니다.")
+    @Operation(summary = "회원 탈퇴", description = "사용자 계정상태를 Delete로 변경 처리합니다.")
     @DeleteMapping
     public ApiResponse<Void> withdraw(
             @AuthenticationPrincipal CustomUserDetails userDetails

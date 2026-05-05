@@ -32,8 +32,8 @@ public class SkinResultService {
                 .orElseThrow(() -> new SkinResultException(SkinResultErrorCode.SKIN_RESULT_NOT_YET));
     }
 
-    public List<SkinResult> getTop4ByUserId(Long userId) {
-        return skinResultRepository.findTop4ByUser_IdOrderByCreatedAtDesc(userId);
+    public List<SkinResult> getTop3ByUserId(Long userId) {
+        return skinResultRepository.findTop3ByUser_IdOrderByCreatedAtDesc(userId);
     }
 
     public SkinResult getSkinResultById(Long skinResultId,Long userId) {
