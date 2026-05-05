@@ -20,14 +20,11 @@ public class ProductScoreCalculator {
     ) {
 
         // top 3 추출
-        List<IngredientGroup> topGroups = need.entrySet().stream()
+        List<IngredientGroup> needTop3Group = need.entrySet().stream()
                 .sorted(Map.Entry.<IngredientGroup, Double>comparingByValue().reversed())
                 .limit(3)
                 .map(Map.Entry::getKey)
                 .toList();
-
-        IngredientGroup top1 = topGroups.get(0);
-        IngredientGroup top2 = topGroups.get(1);
 
         List<ProductScore> result = new ArrayList<>();
 
@@ -36,9 +33,7 @@ public class ProductScoreCalculator {
             double score = calculateScore(
                     need,
                     supply.getSupply(),
-                    topGroups,
-                    top1,
-                    top2
+                    needTop3Group
             );
 
             result.add(new ProductScore(
@@ -53,9 +48,8 @@ public class ProductScoreCalculator {
     private double calculateScore(
             Map<IngredientGroup, Double> need,
             Map<IngredientGroup, Double> supply,
-            List<IngredientGroup> topGroups,
-            IngredientGroup top1,
-            IngredientGroup top2) {
+            List<IngredientGroup> needTop3Group
+    ) {
 
         double core = 0.0; // 중요한 성분 매칭
         double rest = 0.0; // 덜 중요한 성분 매칭
@@ -70,7 +64,7 @@ public class ProductScoreCalculator {
             // 중요한 성분을 따로 모아서 강하게 반영 준비
             // 사용자에게 필요한 성분이라면 중요성분이 아니더라도 일단 반영은 하기
             // 대신에 rest로 분류
-            if (topGroups.contains(ingredientGroup)) {
+            if (needTop3Group.contains(ingredientGroup)) {
                 core += value;
             } else {
                 rest += value;
@@ -80,7 +74,7 @@ public class ProductScoreCalculator {
         double score = (core * 1.2) + (rest * 0.5);
 
         // 상품이 사용자의 핵심성분을 얼마나 포함하고있는지 계산
-        double coverage = topGroups.stream()
+        double coverage = needTop3Group.stream()
                 .mapToDouble(group -> supply.getOrDefault(group, 0.0))
                 .sum();
 
@@ -90,11 +84,13 @@ public class ProductScoreCalculator {
         }
 
         // 제일 중요한 성분을 갖고있다면 좀더 플러스
-        if (supply.containsKey(top1)) {
+        IngredientGroup needTop1 = needTop3Group.get(0);
+        IngredientGroup needTop2 = needTop3Group.get(1);
+        if (supply.containsKey(needTop1)) {
             score += 0.1;
         }
 
-        if (top2 != null && supply.containsKey(top2)) {
+        if (needTop2 != null && supply.containsKey(needTop2)) {
             score += 0.05;
         }
 
