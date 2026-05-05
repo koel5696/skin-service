@@ -26,6 +26,8 @@ public class ProductVectorMapper {
 
         List<ProductGroupScore> scores =
                 productGroupScoreRepository.findByProductIdIn(productIds);
+        Map<Long, Product> productMap = products.stream()
+                .collect(Collectors.toMap(Product::getId, p -> p));
 
         Map<Long, List<ProductGroupScore>> grouped = scores.stream()
                 .collect(Collectors.groupingBy(
@@ -33,9 +35,9 @@ public class ProductVectorMapper {
                 ));
 
         List<ProductSupply> result = new ArrayList<>();
-
         for (Map.Entry<Long, List<ProductGroupScore>> entry : grouped.entrySet()) {
             Long productId = entry.getKey();
+            Product product = productMap.get(productId);
 
             Map<IngredientGroup, Double> supply = entry.getValue().stream()
                     .collect(Collectors.toMap(
@@ -43,7 +45,7 @@ public class ProductVectorMapper {
                             ProductGroupScore::getScore
                     ));
 
-            result.add(new ProductSupply(productId, supply));
+            result.add(new ProductSupply(productId, product.getCategory(), supply));
         }
         return result;
     }
