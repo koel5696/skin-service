@@ -31,12 +31,6 @@ public class SkinProfileService {
         return resolveProfile(ranking);
     }
 
-    public List<SkinUxProfile> getProfileList(List<SkinResult> skinResults) {
-        return skinResults.stream()
-                .map(skinResult -> getProfile(skinResult.getId()))
-                .toList();
-    }
-
     private @NonNull SkinUxProfile resolveProfile(List<IngredientGroup> ranking) {
         return skinUxProfileResolver.resolve(ranking.get(0), ranking.get(1))
                 .orElseThrow(() -> new SkinTestException(SkinTestErrorCode.UX_PROFILE_NOT_FOUND));

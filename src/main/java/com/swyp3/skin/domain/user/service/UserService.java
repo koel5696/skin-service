@@ -17,6 +17,7 @@ import com.swyp3.skin.global.auth.exception.AuthErrorCode;
 import com.swyp3.skin.global.auth.exception.AuthException;
 import com.swyp3.skin.global.auth.oauth.OAuth2UserInfo;
 import com.swyp3.skin.recommendation.ux.SkinProfileService;
+import com.swyp3.skin.recommendation.ux.SkinUxProfile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +32,7 @@ public class UserService {
     private final UserProfileRepository userProfileRepository;
     private final SkinResultService skinResultService;
     private final RoutineGroupService routineGroupService;
+    private final SkinProfileService skinProfileService;
 
 
     public User findOrCreateUser(OAuth2UserInfo userInfo, AuthProvider provider) {
@@ -83,8 +85,6 @@ public class UserService {
 
         List<RoutineGroup> routineGroups =
                 routineGroupService.getTop4ByUserId(userId);
-
-
 
         return MyPageResponse.from(userOauth, userProfile, skinResults, routineGroups);
 

@@ -7,6 +7,7 @@ import com.swyp3.skin.domain.routine.domain.entity.RoutineGroup;
 import com.swyp3.skin.domain.skinresult.domain.entity.SkinResult;
 import com.swyp3.skin.domain.user.domain.entity.UserOauth;
 import com.swyp3.skin.domain.user.domain.entity.UserProfile;
+import com.swyp3.skin.recommendation.ux.SkinUxProfile;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public record MyPageResponse(
                         userProfile.getProfileImageUrl()
                 ),
                 skinResults.stream()
-                        .map(SkinResultSummary::from)
+                        .map(skinResult -> SkinResultSummary.from(skinResult, skinResult.getTypeName()))
                         .toList(),
                 routineGroups.stream()
                         .map(RoutineGroupSummary::from)
