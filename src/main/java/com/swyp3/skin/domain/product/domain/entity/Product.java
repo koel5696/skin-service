@@ -26,7 +26,7 @@ public class Product extends BaseEntity {
     private ProductCategory category;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 10)
+    @Column(length = 10, nullable = false)
     private ProductUsageTime productUsageTime;
 
     @Column(nullable = false)

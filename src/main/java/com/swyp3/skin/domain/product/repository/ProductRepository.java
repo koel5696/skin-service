@@ -17,6 +17,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             )
         """)
     List<Product> search(String keyword);
+    List<Product> findAllByActiveTrue();
 
     long countByActiveTrue();
 }

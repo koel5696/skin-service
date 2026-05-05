@@ -19,9 +19,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Service
 public class RoutineCompositionService {
-    //am pm 시간대가 모두 채워진다는 보장이 없음
-    //카테고리 별로 상품이 모두 채워져 있다는 보장이 없음
-
     public Map<RoutineType, Map<RoutineStepCategory, List<RecommendedProduct>>> compose(List<RecommendedProduct> recommendedProducts) {
         Map<RoutineType, List<RecommendedProduct>> productsByRoutineType =
                 groupProductsByRoutineType(recommendedProducts);
@@ -36,16 +33,17 @@ public class RoutineCompositionService {
             List<RecommendedProduct> recommendedProducts
     ) {
         Map<RoutineType, List<RecommendedProduct>> productsByRoutineType = new EnumMap<>(RoutineType.class);
+        for (RoutineType routineType : RoutineType.values()) {
+            productsByRoutineType.put(routineType, new ArrayList<>()); // 미리 초기화
+        }
 
         for (RecommendedProduct recommendedProduct : recommendedProducts) {
             ProductUsageTime usageTime = recommendedProduct.getProduct().getProductUsageTime();
             if(usageTime == null) {
                 throw new RoutineException(RoutineErrorCode.PRODUCT_USAGE_TIME_NOT_DEFINE);
             }
-
             for (RoutineType routineType : RoutineType.from(usageTime)) {
-                productsByRoutineType.computeIfAbsent(routineType, ignored -> new ArrayList<>())
-                        .add(recommendedProduct);
+                productsByRoutineType.get(routineType).add(recommendedProduct);
             }
         }
         return productsByRoutineType;
@@ -64,13 +62,19 @@ public class RoutineCompositionService {
                             ignored -> new EnumMap<>(RoutineStepCategory.class)
                     );
 
+            for(RoutineStepCategory routineStepCategory : RoutineStepCategory.values()) {
+                if(routineTypeEntry.getKey() == RoutineType.PM && routineStepCategory == RoutineStepCategory.SUN_CARE) {
+                    continue;
+                }
+                productsForStepCategory.put(routineStepCategory, new ArrayList<>());
+            }
+
             for (RecommendedProduct recommendedProduct : routineTypeEntry.getValue()) {
                 Product product = recommendedProduct.getProduct();
                 RoutineStepCategory routineStepCategory =
                         RoutineStepCategory.from(product.getCategory());
 
-                productsForStepCategory.computeIfAbsent(routineStepCategory, ignored -> new ArrayList<>())
-                        .add(recommendedProduct);
+                productsForStepCategory.get(routineStepCategory).add(recommendedProduct);
             }
         }
         return productsByStepCategory;

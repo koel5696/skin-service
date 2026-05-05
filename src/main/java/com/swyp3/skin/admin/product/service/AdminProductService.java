@@ -4,6 +4,8 @@ import com.swyp3.skin.admin.product.dto.AdminProductCreateForm;
 import com.swyp3.skin.admin.product.dto.AdminProductUpdateForm;
 import com.swyp3.skin.domain.product.domain.entity.Product;
 import com.swyp3.skin.domain.product.domain.entity.ProductGroupScore;
+import com.swyp3.skin.domain.product.domain.enums.ProductCategory;
+import com.swyp3.skin.domain.product.domain.enums.ProductUsageTime;
 import com.swyp3.skin.domain.product.repository.ProductGroupScoreRepository;
 import com.swyp3.skin.domain.product.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +37,7 @@ public class AdminProductService {
     @Transactional
     public Long update(Long productId, AdminProductUpdateForm form) {
         Product product = findById(productId);
+        validateSunCareUsageTime(form.category(), form.productUsageTime());
         product.update(
                 form.name(),
                 form.brand(),
@@ -62,6 +65,7 @@ public class AdminProductService {
     @Transactional
     public Long create(AdminProductCreateForm form) {
         validateGroupScores(form.groupScores());
+        validateSunCareUsageTime(form.category(), form.productUsageTime());
 
         Product product = Product.create(
                 form.name(),
@@ -92,6 +96,12 @@ public class AdminProductService {
             if (!unique.add(gs.ingredientGroup())) {
                 throw new IllegalArgumentException("성분군은 중복될 수 없습니다.");
             }
+        }
+    }
+
+    private void validateSunCareUsageTime(ProductCategory category, ProductUsageTime productUsageTime) {
+        if (category == ProductCategory.SUN_CARE && productUsageTime != ProductUsageTime.AM) {
+            throw new IllegalArgumentException("선크림은 루틴 시간대를 AM으로만 설정할 수 있습니다.");
         }
     }
 }
