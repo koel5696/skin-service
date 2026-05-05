@@ -7,6 +7,7 @@ import com.swyp3.skin.api.v1.skintest.mapper.SkinInputMapper;
 import com.swyp3.skin.api.v1.skintest.mapper.SkinTestPreviewResponseMapper;
 import com.swyp3.skin.api.v1.skintest.mapper.SkinTestResultResponseMapper;
 import com.swyp3.skin.domain.skinresult.domain.entity.SkinResult;
+import com.swyp3.skin.domain.skinresult.service.SkinResultQueryService;
 import com.swyp3.skin.domain.skinresult.service.SkinResultService;
 import com.swyp3.skin.domain.skintest.dto.SkinPreviewCacheValue;
 import com.swyp3.skin.domain.skintest.service.SkinPreviewCacheService;
@@ -18,6 +19,8 @@ import com.swyp3.skin.recommendation.ingredient.model.SkinInput;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -31,6 +34,7 @@ import org.springframework.web.bind.annotation.*;
 public class SkinTestController {
 
     private final SkinResultService skinResultService;
+    private final SkinResultQueryService skinResultQueryService;
 
     private final SkinTestApplicationService skinTestApplicationService;
     private final SkinPreviewCacheService skinPreviewCacheService;
@@ -76,6 +80,19 @@ public class SkinTestController {
 
         CreateSkinResultResponse response =
                 skinTestApplicationService.createResult(userId, request);
+        return ApiResponse.ok(response);
+    }
+
+    @Operation(
+            summary = "내 진단 목록 조회",
+            description = "사용자의 피부 진단 이력을 커서 방식으로 조회합니다.")
+    @GetMapping("/results")
+    public ApiResponse<SkinResultListResponse> getSkinResults(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestParam(required = false) @Positive(message = "커서는 1 이상이어야 합니다.") Long cursor,
+            @RequestParam(defaultValue = "10") @Min(value = 1, message = "페이지 크기는 최소 1 이상이어야 합니다.") int size
+    ) {
+        SkinResultListResponse response = skinResultQueryService.getSkinResults(userDetails.userId(), cursor, size);
         return ApiResponse.ok(response);
     }
 

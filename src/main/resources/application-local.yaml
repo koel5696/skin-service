@@ -4,7 +4,6 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
-
   jpa:
     hibernate:
       ddl-auto: update
@@ -13,10 +12,8 @@ spring:
       hibernate:
         format_sql: true
         default_batch_fetch_size: 100
-
   flyway:
     enabled: false
-
   security:
     oauth2:
       client:
@@ -39,22 +36,21 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v2/user/me
             user-name-attribute: id
+
 management:
   server:
-    port: 8082   # 선택 (안 해도 됨)
-
+    port: 8082
   endpoints:
     web:
       exposure:
         include: "*"
-
   endpoint:
     health:
       show-details: always
-
   metrics:
     tags:
       application: skin-service-local
+
 app:
   cookie:
     secure: false
