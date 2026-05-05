@@ -19,9 +19,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Service
 public class RoutineCompositionService {
-    //am pm 시간대가 모두 채워진다는 보장이 없음
-    //카테고리 별로 상품이 모두 채워져 있다는 보장이 없음
-
     public Map<RoutineType, Map<RoutineStepCategory, List<RecommendedProduct>>> compose(List<RecommendedProduct> recommendedProducts) {
         Map<RoutineType, List<RecommendedProduct>> productsByRoutineType =
                 groupProductsByRoutineType(recommendedProducts);
@@ -53,7 +50,7 @@ public class RoutineCompositionService {
     }
 
     private Map<RoutineType, Map<RoutineStepCategory, List<RecommendedProduct>>> groupProductsByStepCategory(
-            Map<RoutineType, List<RecommendedProduct>> productsByRoutineType // RoutineType >> am pm 상품이 하나도 없는 경우도 만들어야함
+            Map<RoutineType, List<RecommendedProduct>> productsByRoutineType
     ) {
         Map<RoutineType, Map<RoutineStepCategory, List<RecommendedProduct>>> productsByStepCategory =
                 new EnumMap<>(RoutineType.class);
@@ -66,6 +63,9 @@ public class RoutineCompositionService {
                     );
 
             for(RoutineStepCategory routineStepCategory : RoutineStepCategory.values()) {
+                if(routineTypeEntry.getKey() == RoutineType.PM && routineStepCategory == RoutineStepCategory.SUN_CARE) {
+                    continue;
+                }
                 productsForStepCategory.put(routineStepCategory, new ArrayList<>());
             }
 
