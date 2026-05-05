@@ -1,6 +1,7 @@
 package com.swyp3.skin.recommendation.ux;
 
 import com.swyp3.skin.domain.common.enums.IngredientGroup;
+import com.swyp3.skin.domain.skinresult.domain.entity.SkinResult;
 import com.swyp3.skin.domain.skinresult.domain.entity.SkinResultGroupScore;
 import com.swyp3.skin.domain.skinresult.service.SkinResultGroupScoreService;
 import com.swyp3.skin.domain.skintest.exception.SkinTestErrorCode;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component

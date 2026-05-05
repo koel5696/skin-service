@@ -16,6 +16,8 @@ import com.swyp3.skin.global.auth.enums.AuthProvider;
 import com.swyp3.skin.global.auth.exception.AuthErrorCode;
 import com.swyp3.skin.global.auth.exception.AuthException;
 import com.swyp3.skin.global.auth.oauth.OAuth2UserInfo;
+import com.swyp3.skin.recommendation.ux.SkinProfileService;
+import com.swyp3.skin.recommendation.ux.SkinUxProfile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -78,13 +80,12 @@ public class UserService {
                 .orElseThrow(() -> new AuthException(AuthErrorCode.USER_NOT_FOUND));
 
         List<SkinResult> skinResults =
-                skinResultService.getTop4ByUserId(userId);
+                skinResultService.getTop3ByUserId(userId);
 
-        List<RoutineGroup> routineGroups =
-                routineGroupService.getTop4ByUserId(userId);
+        RoutineGroup routineGroup =
+                routineGroupService.getLatestByUserId(userId);
 
-
-        return MyPageResponse.from(userOauth, userProfile, skinResults, routineGroups);
+        return MyPageResponse.from(userOauth, userProfile, skinResults, routineGroup);
 
     }
 
