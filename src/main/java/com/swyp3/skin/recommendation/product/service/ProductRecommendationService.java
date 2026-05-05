@@ -40,7 +40,7 @@ public class ProductRecommendationService {
         Map<IngredientGroup, Double> need = loadNeed(resultId);
 
         // 2. Product 추천 후보 조회
-        List<Product> products = productRepository.findAll();
+        List<Product> products = productRepository.findAllByActiveTrue();
 
         // 3. Supply 생성 해당 제품이 어떤 성분 얼마나 공급하는지
         List<ProductSupply> supplies =
