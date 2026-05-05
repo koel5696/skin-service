@@ -30,7 +30,7 @@ public class SkinTestResultResponseMapper {
         return SkinTestResultResponse.of(today(), profile, ingredientMetas);
     }
 
-    // dtoㅇ내장으로 넣어도 될듯함 일단 보류
+    // dto 내장으로 넣어도 될듯함 일단 보류
     private static @NonNull List<IngredientMeta> getIngredientMetas(SkinUxProfile profile) {
         return profile.ingredients().stream()
                 .map(ingredientType -> {
