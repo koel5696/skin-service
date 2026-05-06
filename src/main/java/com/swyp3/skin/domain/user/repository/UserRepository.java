@@ -1,9 +1,6 @@
 package com.swyp3.skin.domain.user.repository;
 
-import com.swyp3.skin.admin.users.dto.AdminUserResponse;
 import com.swyp3.skin.domain.user.domain.entity.User;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
