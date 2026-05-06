@@ -16,12 +16,11 @@ import com.swyp3.skin.global.auth.enums.AuthProvider;
 import com.swyp3.skin.global.auth.exception.AuthErrorCode;
 import com.swyp3.skin.global.auth.exception.AuthException;
 import com.swyp3.skin.global.auth.oauth.OAuth2UserInfo;
-import com.swyp3.skin.recommendation.ux.SkinProfileService;
-import com.swyp3.skin.recommendation.ux.SkinUxProfile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -82,10 +81,10 @@ public class UserService {
         List<SkinResult> skinResults =
                 skinResultService.getTop3ByUserId(userId);
 
-        RoutineGroup routineGroup =
+        Optional<RoutineGroup> routineGroup =
                 routineGroupService.getLatestByUserId(userId);
 
-        return MyPageResponse.from(userOauth, userProfile, skinResults, routineGroup);
+        return MyPageResponse.from(userOauth, userProfile, skinResults, routineGroup.orElse(null));
 
     }
 
