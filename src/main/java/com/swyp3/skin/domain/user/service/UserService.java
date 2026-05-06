@@ -45,7 +45,7 @@ public class UserService {
                     if (user.getUserStatus() == UserStatus.DELETED){
                         User newUser = userRepository.save(User.create());
 
-                        userOauth.rebindUser(user);
+                        userOauth.rebindUser(newUser);
 
                         userProfileRepository.save(UserProfile.create(
                                 newUser,
