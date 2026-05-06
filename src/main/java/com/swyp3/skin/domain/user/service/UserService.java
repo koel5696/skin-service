@@ -43,7 +43,18 @@ public class UserService {
 
                     //탈퇴한 유저가 다시 로그인하는 경우, 유저 상태를 활성화로 변경
                     if (user.getUserStatus() == UserStatus.DELETED){
-                        user.reActivate();
+                        User newUser = userRepository.save(User.create());
+
+                        userOauth.rebindUser(user);
+
+                        userProfileRepository.save(UserProfile.create(
+                                newUser,
+                                userInfo.getNickname(),
+                                userInfo.getProfileImageUrl()
+                        ));
+
+                        newUser.login();
+                        return newUser;
                     }
 
                     // 로그인 시점 업데이트
