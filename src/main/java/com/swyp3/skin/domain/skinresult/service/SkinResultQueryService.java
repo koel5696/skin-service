@@ -29,7 +29,7 @@ public class SkinResultQueryService {
         }
 
         List<SkinResultSummary> summaries = skinResults.stream()
-                .map(SkinResultSummary::from)
+                .map(skinResult -> SkinResultSummary.from(skinResult, skinResult.getTypeName()))
                 .toList();
 
         return SkinResultListResponse.from(summaries, hasNext);
