@@ -16,6 +16,7 @@ public record RoutineGroupSummary(
         String createdAt
 ) {
     public static RoutineGroupSummary from(RoutineGroup routine) {
+        if (routine == null) return null;
         return new RoutineGroupSummary(
                 routine.getId(),
                 routine.getTitle(),
