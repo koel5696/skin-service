@@ -18,6 +18,7 @@ import com.swyp3.skin.global.auth.exception.AuthException;
 import com.swyp3.skin.global.auth.oauth.OAuth2UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -104,6 +105,7 @@ public class UserService {
                 .orElseThrow(() -> new AuthException(AuthErrorCode.USER_NOT_FOUND));
     }
 
+    @Transactional
     public void deleteUser(Long id) {
         userRepository.findById(id)
                 .orElseThrow(() -> new AuthException(AuthErrorCode.USER_NOT_FOUND))
