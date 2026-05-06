@@ -46,9 +46,4 @@ public class User extends BaseEntity {
         this.userStatus = UserStatus.DELETED;
         this.deletedAt = LocalDateTime.now();
     }
-
-    public void reActivate() {
-        this.userStatus = UserStatus.ACTIVE;
-        this.deletedAt = null;
-    }
 }
