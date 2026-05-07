@@ -1,9 +1,6 @@
 package com.swyp3.skin.api.v1.routine.dto.response;
 
-
 import io.swagger.v3.oas.annotations.media.Schema;
-
-import java.time.LocalDateTime;
 
 @Schema(description = "루틴 그룹 상세 조회 응답")
 public record RoutineDetailResponse(
@@ -32,7 +29,7 @@ public record RoutineDetailResponse(
         @Schema(description = "PM 루틴 구성")
         RoutineSectionResponse pmRoutine,
 
-        @Schema(description = "생성 시각", example = "2026-04-05T14:30:00")
-        LocalDateTime createdAt
+        @Schema(description = "생성 상세 시간", example = "2026-04-05 14:30")
+        String createdAt
 ) {
 }

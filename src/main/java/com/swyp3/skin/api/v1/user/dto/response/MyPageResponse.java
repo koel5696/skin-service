@@ -18,10 +18,10 @@ public record MyPageResponse(
         @Schema(description = "사용자 정보",example = "이름 : 홍길동, 이메일 : example.gamil.com")
         UserInfo user,
 
-        @Schema(description = "최근 피부 진단 결과 목록",example = "진단 시각: 2026-04-03 14:30:00")
+        @Schema(description = "최근 피부 진단 결과 목록",example = "진단 상세 시간: 2026-04-03 14:30")
         List<SkinResultSummary> skinResults,
 
-        @Schema(description = "최근 루틴",example = "루틴명 : 아침 루틴, 진단 시각: 2026-04-03 14:30:00")
+        @Schema(description = "최근 루틴",example = "루틴명 : 아침 루틴, 루틴 생성 날짜: 2026-04-03")
         RoutineGroupSummary routine
 ) {
 

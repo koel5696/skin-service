@@ -9,7 +9,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 @Entity
@@ -40,9 +40,9 @@ public class SkinResult extends BaseEntity {
     private List<Concern> concerns;
 
     @Column(nullable = false)
-    private LocalDateTime diagnosedAt;
+    private Instant diagnosedAt;
 
-    private SkinResult(User user, SkinType skinType, String typeName, List<Concern> concerns, LocalDateTime diagnosedAt) {
+    private SkinResult(User user, SkinType skinType, String typeName, List<Concern> concerns, Instant diagnosedAt) {
         this.user = user;
         this.skinType = skinType;
         this.typeName = typeName;
@@ -55,7 +55,7 @@ public class SkinResult extends BaseEntity {
             SkinType skinType,
             String typeName,
             List<Concern> concerns,
-            LocalDateTime diagnosedAt) {
+            Instant diagnosedAt) {
         return new SkinResult(user, skinType, typeName,concerns ,diagnosedAt);
     }
 }

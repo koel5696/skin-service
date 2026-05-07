@@ -5,17 +5,16 @@ import com.swyp3.skin.domain.common.enums.IngredientGroup;
 import com.swyp3.skin.domain.skintest.exception.SkinTestErrorCode;
 import com.swyp3.skin.domain.skintest.exception.SkinTestException;
 import com.swyp3.skin.recommendation.ingredient.model.RecommendationResult;
-import com.swyp3.skin.recommendation.ux.IngredientMeta;
 import com.swyp3.skin.recommendation.ux.SkinUxProfile;
 import com.swyp3.skin.recommendation.ux.SkinUxProfileResolver;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
+import java.time.Instant;
 import java.util.List;
+
+import static com.swyp3.skin.global.timeUtil.TimeUtils.formatToKstDate;
 
 @Component
 @RequiredArgsConstructor
@@ -32,12 +31,7 @@ public class SkinTestPreviewResponseMapper {
 
         SkinUxProfile profile = resolveProfile(ranking);
 
-        return SkinTestPreviewResponse.of(today(), profile);
-    }
-
-    private static String today() {
-         return LocalDate.now(ZoneId.of("Asia/Seoul"))
-                .format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+        return SkinTestPreviewResponse.of(formatToKstDate(Instant.now()), profile);
     }
 
     private @NonNull SkinUxProfile resolveProfile(List<IngredientGroup> ranking) {

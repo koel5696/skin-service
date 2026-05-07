@@ -21,6 +21,9 @@ import org.springframework.stereotype.Service;
 import java.util.Comparator;
 import java.util.List;
 
+import static com.swyp3.skin.global.timeUtil.TimeUtils.formatToKstDate;
+import static com.swyp3.skin.global.timeUtil.TimeUtils.formatToKstDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class RoutineQueryService {
@@ -44,7 +47,7 @@ public class RoutineQueryService {
                 .map(routineGroup -> new RoutineSummaryResponse(
                         routineGroup.getId(),
                         routineGroup.getTitle(),
-                        routineGroup.getCreatedAt()
+                        formatToKstDate(routineGroup.getCreatedAt())
                 ))
                 .toList();
 
@@ -88,7 +91,7 @@ public class RoutineQueryService {
                 routineGroup.getSummary(),
                 amRoutine,
                 pmRoutine,
-                routineGroup.getCreatedAt()
+                formatToKstDateTime(routineGroup.getCreatedAt())
         );
     }
 

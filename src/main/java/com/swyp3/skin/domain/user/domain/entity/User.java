@@ -6,7 +6,7 @@ import com.swyp3.skin.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
 @Getter
@@ -25,9 +25,9 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private UserStatus userStatus;
 
-    private LocalDateTime lastLoginAt;
+    private Instant lastLoginAt;
 
-    private LocalDateTime deletedAt;
+    private Instant deletedAt;
 
     private User(UserRole role){
         this.role = role;
@@ -39,11 +39,11 @@ public class User extends BaseEntity {
     }
 
     public void login() {
-        this.lastLoginAt = LocalDateTime.now();
+        this.lastLoginAt = Instant.now();
     }
 
     public void delete() {
         this.userStatus = UserStatus.DELETED;
-        this.deletedAt = LocalDateTime.now();
+        this.deletedAt = Instant.now();
     }
 }

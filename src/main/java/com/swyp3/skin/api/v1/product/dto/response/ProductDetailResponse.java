@@ -1,10 +1,9 @@
 package com.swyp3.skin.api.v1.product.dto.response;
 
 import com.swyp3.skin.domain.product.domain.entity.Product;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-import java.util.List;
+import static com.swyp3.skin.global.timeUtil.TimeUtils.*;
 
 @Schema(description = "제품 상세 조회 응답")
 public record ProductDetailResponse(
@@ -41,7 +40,7 @@ public record ProductDetailResponse(
                 product.getPrice(),
                 product.getImageUrl(),
                 product.getDescription(),
-                product.getCreatedAt().toLocalDate().toString(),
+                formatToKstDate(product.getCreatedAt()),
                 product.getPurchaseUrl()
         );
     }
