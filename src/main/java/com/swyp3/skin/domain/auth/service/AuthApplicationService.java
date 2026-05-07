@@ -108,6 +108,7 @@ public class AuthApplicationService {
         }
     }
 
+    @Transactional
     public RefreshToken saveRefreshToken(User user) {
         return refreshTokenRepository.save(RefreshToken.create(user));
     }
