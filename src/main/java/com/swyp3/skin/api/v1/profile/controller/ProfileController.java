@@ -41,7 +41,7 @@ public class ProfileController {
         SkinUxProfile profile = skinProfileService.getProfile(skinResult.getId());
 
 
-        SkinProfileResponse response = SkinProfileResponse.from(skinResult.getId(),skinResult.getDiagnosedAt(), profile);
+        SkinProfileResponse response = SkinProfileResponse.from(skinResult.getId(), skinResult.getDiagnosedAt(), profile);
         return ApiResponse.ok(response);
     }
 

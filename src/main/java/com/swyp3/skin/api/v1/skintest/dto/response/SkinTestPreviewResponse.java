@@ -1,12 +1,8 @@
-
 package com.swyp3.skin.api.v1.skintest.dto.response;
 
-import com.swyp3.skin.recommendation.ux.IngredientMeta;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import com.swyp3.skin.recommendation.ux.SkinUxProfile;
-
-import java.util.List;
 
 @Schema(description = "피부 진단 미리보기 응답")
 public record SkinTestPreviewResponse(
