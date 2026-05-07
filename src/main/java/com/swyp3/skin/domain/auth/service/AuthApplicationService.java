@@ -34,6 +34,7 @@ public class AuthApplicationService {
     private final UserProfileRepository userProfileRepository;
     private final UserRepository userRepository;
 
+
     public CurrentUserResponse getCurrentUser(Long userId) {
         UserProfile userProfile = userProfileRepository.findByUser_Id(userId)
                 .orElseThrow(() -> new AuthException(AuthErrorCode.USER_NOT_FOUND));
@@ -104,5 +105,9 @@ public class AuthApplicationService {
         if (refreshToken.isRevoked()) {
             throw new AuthException(AuthErrorCode.INVALID_TOKEN);
         }
+    }
+
+    public RefreshToken saveRefreshToken(User user) {
+        return refreshTokenRepository.save(RefreshToken.create(user));
     }
 }
