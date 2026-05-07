@@ -7,7 +7,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.UUID;
 
 @Entity
@@ -29,7 +30,7 @@ public class RefreshToken extends BaseEntity {
     private String token;
 
     @Column(nullable = false)
-    private LocalDateTime expiryDate;
+    private Instant expiryDate;
 
     @Column(nullable = false)
     private boolean revoked;
@@ -41,7 +42,8 @@ public class RefreshToken extends BaseEntity {
     public static RefreshToken create(User user) {
         RefreshToken refreshToken = new RefreshToken(user);
         refreshToken.token = refreshToken.newToken();
-        refreshToken.expiryDate = LocalDateTime.now().plusDays(EXPIRE_DAYS);
+        refreshToken.expiryDate = Instant.now()
+                .plus(Duration.ofDays(EXPIRE_DAYS));
         refreshToken.revoked = false;
         return refreshToken;
     }
@@ -51,7 +53,7 @@ public class RefreshToken extends BaseEntity {
     }
 
     public boolean isExpired() {
-        return expiryDate.isBefore(LocalDateTime.now());
+        return expiryDate.isBefore(Instant.now());
     }
 
     public boolean isValid() {
@@ -64,7 +66,8 @@ public class RefreshToken extends BaseEntity {
 
     public void rotate() {
         this.token = newToken();
-        this.expiryDate = LocalDateTime.now().plusDays(EXPIRE_DAYS);
+        this.expiryDate = Instant.now()
+                .plus(Duration.ofDays(EXPIRE_DAYS));
         this.revoked = false;
     }
 
