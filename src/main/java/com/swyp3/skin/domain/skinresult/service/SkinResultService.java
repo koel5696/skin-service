@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -22,7 +22,7 @@ public class SkinResultService {
     @Transactional
     public SkinResult saveFromResolvedData(User user, SkinPreviewCacheValue cached) {
         SkinResult skinResult = SkinResult.create(
-                user, cached.skinInput().getSkinType() , cached.typeName(), cached.skinInput().getConcerns(),LocalDateTime.now()
+                user, cached.skinInput().getSkinType(), cached.typeName(), cached.skinInput().getConcerns(), Instant.now()
         );
         return skinResultRepository.save(skinResult);
     }

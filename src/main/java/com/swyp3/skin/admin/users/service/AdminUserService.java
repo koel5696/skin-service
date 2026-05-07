@@ -14,8 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.List;
+import java.time.Instant;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +36,7 @@ public class AdminUserService {
 
             long totalDiagnoses = skinResultRepository.countByUser(user);
 
-            LocalDateTime lastDiagnosedAt = skinResultRepository
+            Instant lastDiagnosedAt = skinResultRepository
                     .findTopByUserOrderByDiagnosedAtDesc(user)
                     .map(SkinResult::getDiagnosedAt)
                     .orElse(null);

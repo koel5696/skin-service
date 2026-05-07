@@ -11,23 +11,20 @@ import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
+
+import static com.swyp3.skin.global.timeUtil.TimeUtils.formatToKstDate;
 
 @Component
 @RequiredArgsConstructor
 public class SkinTestResultResponseMapper {
 
-
     private final SkinProfileService skinProfileService;
 
     public SkinTestResultResponse toResponse(SkinResult skinResult) {
-
         SkinUxProfile profile = skinProfileService.getProfile(skinResult.getId());
         List<IngredientMeta> ingredientMetas = getIngredientMetas(profile);
-        return SkinTestResultResponse.of(today(), profile, ingredientMetas);
+        return SkinTestResultResponse.of(formatToKstDate(skinResult.getDiagnosedAt()), profile, ingredientMetas);
     }
 
     // dto 내장으로 넣어도 될듯함 일단 보류
@@ -40,10 +37,5 @@ public class SkinTestResultResponseMapper {
                     }
                     return meta;
                 }).toList();
-    }
-
-    private static String today() {
-        return LocalDate.now(ZoneId.of("Asia/Seoul"))
-                .format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
     }
 }

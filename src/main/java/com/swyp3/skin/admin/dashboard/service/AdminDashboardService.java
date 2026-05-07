@@ -7,16 +7,14 @@ import com.swyp3.skin.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+
+import static com.swyp3.skin.global.timeUtil.TimeUtils.KST;
 
 @Service
 @RequiredArgsConstructor
 public class AdminDashboardService {
-
-    private static final ZoneId KST = ZoneId.of("Asia/Seoul");
-
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final SkinResultRepository skinResultRepository;
@@ -25,8 +23,8 @@ public class AdminDashboardService {
 
         LocalDate today = LocalDate.now(KST);
 
-        LocalDateTime start = today.atStartOfDay();
-        LocalDateTime end = today.plusDays(1).atStartOfDay();
+        Instant start = today.atStartOfDay(KST).toInstant();
+        Instant end = today.plusDays(1).atStartOfDay(KST).toInstant();
 
         long todaySignUpCount = userRepository.countByCreatedAtBetween(start, end);
         long totalUserCount = userRepository.count();

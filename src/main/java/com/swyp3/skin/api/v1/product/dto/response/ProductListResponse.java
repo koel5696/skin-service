@@ -1,9 +1,6 @@
 package com.swyp3.skin.api.v1.product.dto.response;
 
-
-import com.swyp3.skin.domain.skinresult.domain.entity.SkinResult;
 import com.swyp3.skin.recommendation.product.dto.RecommendedProduct;
-import com.swyp3.skin.recommendation.ux.SkinUxProfile;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 
