@@ -18,6 +18,7 @@ import com.swyp3.skin.global.auth.exception.AuthException;
 import com.swyp3.skin.global.auth.oauth.OAuth2UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -42,7 +43,18 @@ public class UserService {
 
                     //탈퇴한 유저가 다시 로그인하는 경우, 유저 상태를 활성화로 변경
                     if (user.getUserStatus() == UserStatus.DELETED){
-                        user.reActivate();
+                        User newUser = userRepository.save(User.create());
+
+                        userOauth.rebindUser(newUser);
+
+                        userProfileRepository.save(UserProfile.create(
+                                newUser,
+                                userInfo.getNickname(),
+                                userInfo.getProfileImageUrl()
+                        ));
+
+                        newUser.login();
+                        return newUser;
                     }
 
                     // 로그인 시점 업데이트
@@ -93,6 +105,7 @@ public class UserService {
                 .orElseThrow(() -> new AuthException(AuthErrorCode.USER_NOT_FOUND));
     }
 
+    @Transactional
     public void deleteUser(Long id) {
         userRepository.findById(id)
                 .orElseThrow(() -> new AuthException(AuthErrorCode.USER_NOT_FOUND))

@@ -45,4 +45,8 @@ public class UserOauth extends BaseEntity {
     public static UserOauth create(User user, AuthProvider provider, String providerUserId, String email) {
         return new UserOauth(user, provider, providerUserId, email);
     }
+
+    public void rebindUser(User newUser) {
+        this.user = newUser;
+    }
 }

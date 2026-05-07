@@ -3,6 +3,7 @@ package com.swyp3.skin.global.config;
 import com.swyp3.skin.global.auth.CustomOAuth2UserService;
 import com.swyp3.skin.global.auth.JwtAuthenticationFilter;
 import com.swyp3.skin.global.auth.OAuth2SuccessHandler;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -98,11 +99,29 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(
                                 "/api/v1/surveys",
-                                "/api/v1/results/preview"
+                                "/api/v1/results/preview",
+                                "/api/v1/auth/refresh"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
-
+                .exceptionHandling(ex -> ex
+                        // 토큰 없음,만료,형식오류,유효인증 부재
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            response.setContentType("application/json;charset=UTF-8");
+                            response.getWriter().write("""
+                                {"success":false,"error":{"code":"AUTH_401","message":"인증이 필요합니다."}}
+                            """);
+                        })
+                        // 인증완료 -> 해당 리소스권한 없음
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                            response.setContentType("application/json;charset=UTF-8");
+                            response.getWriter().write("""
+                                {"success":false,"error":{"code":"AUTH_403","message":"권한이 없습니다."}}
+                            """);
+                        })
+                )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
