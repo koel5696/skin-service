@@ -10,6 +10,7 @@ import com.swyp3.skin.domain.user.repository.UserRepository;
 import com.swyp3.skin.global.auth.JwtTokenProvider;
 import com.swyp3.skin.global.auth.exception.AuthErrorCode;
 import com.swyp3.skin.global.auth.exception.AuthException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
@@ -109,5 +110,21 @@ public class AuthApplicationService {
 
     public RefreshToken saveRefreshToken(User user) {
         return refreshTokenRepository.save(RefreshToken.create(user));
+    }
+
+    public void clearAuthCookies(HttpServletResponse response) {
+        // accessToken 쿠키 삭제
+        Cookie accessCookie = new Cookie("accessToken", null);
+        accessCookie.setMaxAge(0);
+        accessCookie.setPath("/");
+        accessCookie.setHttpOnly(true);
+        response.addCookie(accessCookie);
+
+        // refreshToken 쿠키 삭제 (발급 path와 동일해야 삭제됨)
+        Cookie refreshCookie = new Cookie("refreshToken", null);
+        refreshCookie.setMaxAge(0);
+        refreshCookie.setPath("/api/v1/auth/refresh");
+        refreshCookie.setHttpOnly(true);
+        response.addCookie(refreshCookie);
     }
 }

@@ -6,9 +6,7 @@ import com.swyp3.skin.global.auth.CustomUserDetails;
 import com.swyp3.skin.global.response.dto.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -45,14 +43,10 @@ public class AuthController {
             @AuthenticationPrincipal CustomUserDetails userDetails,
             HttpServletResponse response
     ) {
+        // refresh토큰 삭제 - 여러기기로 로그인하면 싹다지워짐
         authApplicationService.logout(userDetails.userId());
-
-        // 쿠키 삭제 (AccessToken 무효화)
-        Cookie cookie = new Cookie("accessToken", null);
-        cookie.setMaxAge(0);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        response.addCookie(cookie);
+        // 쿠키 초기화
+        authApplicationService.clearAuthCookies(response);
 
         return ApiResponse.ok();
     }
