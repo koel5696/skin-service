@@ -2,6 +2,8 @@ package com.swyp3.skin.global.auth;
 
 import com.swyp3.skin.domain.user.domain.enums.UserStatus;
 import com.swyp3.skin.domain.user.repository.UserRepository;
+import com.swyp3.skin.global.auth.exception.AuthErrorCode;
+import com.swyp3.skin.global.auth.exception.AuthException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -11,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -73,8 +76,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 });
             }
-        } catch (Exception e) {
-            log.error("Could not set user authentication in security context", e);
+        } catch (JwtException | IllegalArgumentException e) {
+            throw new AuthException(AuthErrorCode.INVALID_TOKEN);
         }
 
         filterChain.doFilter(request, response);
