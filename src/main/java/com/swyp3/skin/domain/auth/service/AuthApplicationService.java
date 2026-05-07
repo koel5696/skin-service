@@ -1,7 +1,6 @@
 package com.swyp3.skin.domain.auth.service;
 
 import com.swyp3.skin.api.v1.auth.dto.response.CurrentUserResponse;
-import com.swyp3.skin.api.v1.auth.dto.response.TokenRefreshResponse;
 import com.swyp3.skin.domain.auth.domain.entity.RefreshToken;
 import com.swyp3.skin.domain.auth.repository.RefreshTokenRepository;
 import com.swyp3.skin.domain.user.domain.entity.User;
@@ -11,21 +10,31 @@ import com.swyp3.skin.domain.user.repository.UserRepository;
 import com.swyp3.skin.global.auth.JwtTokenProvider;
 import com.swyp3.skin.global.auth.exception.AuthErrorCode;
 import com.swyp3.skin.global.auth.exception.AuthException;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NonNull;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
+import java.time.Duration;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class AuthApplicationService {
 
+    @Value("${app.cookie.secure:false}")
+    private boolean cookieSecure;
+
     private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserProfileRepository userProfileRepository;
     private final UserRepository userRepository;
+
 
     public CurrentUserResponse getCurrentUser(Long userId) {
         UserProfile userProfile = userProfileRepository.findByUser_Id(userId)
@@ -40,16 +49,25 @@ public class AuthApplicationService {
     }
 
     @Transactional
-    public TokenRefreshResponse refresh(String refreshTokenStr) {
-        RefreshToken refreshToken = refreshTokenRepository.findByToken(refreshTokenStr)
+    public void refresh(String requestRefreshToken, HttpServletResponse response) {
+        RefreshToken refreshToken = refreshTokenRepository.findByToken(requestRefreshToken)
                 .orElseThrow(() -> new AuthException(AuthErrorCode.INVALID_TOKEN));
 
-        if (refreshToken.isRevoked() || refreshToken.getExpiryDate().isBefore(Instant.now())) {
-            throw new AuthException(AuthErrorCode.EXPIRED_TOKEN);
-        }
+        // refresh 토큰 유효성 검사
+        validToken(refreshToken);
 
+        // refresh rotation
+        refreshToken.rotate();
+
+        // access 재발급
         String newAccessToken = jwtTokenProvider.createAccessToken(refreshToken.getUser().getId());
-        return new TokenRefreshResponse(newAccessToken);
+
+        ResponseCookie accessCookie = getAccessToken(newAccessToken);
+
+        ResponseCookie refreshCookie = getRefreshToken(refreshToken);
+
+        response.addHeader(HttpHeaders.SET_COOKIE, accessCookie.toString());
+        response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
     }
 
     @Transactional
@@ -57,5 +75,57 @@ public class AuthApplicationService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AuthException(AuthErrorCode.USER_NOT_FOUND));
         refreshTokenRepository.deleteByUser(user);
+    }
+
+    private @NonNull ResponseCookie getRefreshToken(RefreshToken refreshToken) {
+        return ResponseCookie.from("refreshToken", refreshToken.getToken())
+                .httpOnly(true)
+                .secure(cookieSecure)
+                .sameSite(cookieSecure ? "None" : "Lax")
+                .path("/api/v1/auth/refresh")
+                .maxAge(Duration.ofDays(14))
+                .build();
+    }
+
+    private @NonNull ResponseCookie getAccessToken(String newAccessToken) {
+        return ResponseCookie.from("accessToken", newAccessToken)
+                .httpOnly(true)
+                .secure(cookieSecure)
+                .sameSite(cookieSecure ? "None" : "Lax")
+                .path("/")
+                .maxAge(Duration.ofHours(1))
+                .build();
+    }
+
+    private static void validToken(RefreshToken refreshToken) {
+        if (refreshToken.isExpired()) {
+            refreshToken.revoke();
+            throw new AuthException(AuthErrorCode.EXPIRED_TOKEN);
+        }
+
+        if (refreshToken.isRevoked()) {
+            throw new AuthException(AuthErrorCode.INVALID_TOKEN);
+        }
+    }
+
+    @Transactional
+    public RefreshToken saveRefreshToken(User user) {
+        return refreshTokenRepository.save(RefreshToken.create(user));
+    }
+
+    public void clearAuthCookies(HttpServletResponse response) {
+        // accessToken 쿠키 삭제
+        Cookie accessCookie = new Cookie("accessToken", null);
+        accessCookie.setMaxAge(0);
+        accessCookie.setPath("/");
+        accessCookie.setHttpOnly(true);
+        response.addCookie(accessCookie);
+
+        // refreshToken 쿠키 삭제 (발급 path와 동일해야 삭제됨)
+        Cookie refreshCookie = new Cookie("refreshToken", null);
+        refreshCookie.setMaxAge(0);
+        refreshCookie.setPath("/api/v1/auth/refresh");
+        refreshCookie.setHttpOnly(true);
+        response.addCookie(refreshCookie);
     }
 }
