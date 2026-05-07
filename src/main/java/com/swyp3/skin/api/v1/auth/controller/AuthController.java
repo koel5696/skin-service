@@ -1,8 +1,6 @@
 package com.swyp3.skin.api.v1.auth.controller;
 
-import com.swyp3.skin.api.v1.auth.dto.request.RefreshTokenRequest;
 import com.swyp3.skin.api.v1.auth.dto.response.CurrentUserResponse;
-import com.swyp3.skin.api.v1.auth.dto.response.TokenRefreshResponse;
 import com.swyp3.skin.domain.auth.service.AuthApplicationService;
 import com.swyp3.skin.global.auth.CustomUserDetails;
 import com.swyp3.skin.global.response.dto.ApiResponse;
@@ -33,10 +31,12 @@ public class AuthController {
 
     @Operation(summary = "AccessToken 재발급")
     @PostMapping("/refresh")
-    public ApiResponse<TokenRefreshResponse> refreshToken(
-            @Valid @RequestBody RefreshTokenRequest request
+    public ApiResponse<Void> refreshToken(
+            @CookieValue("refreshToken") String requestRefreshToken,
+            HttpServletResponse response
     ) {
-        return ApiResponse.ok(authApplicationService.refresh(request.refreshToken()));
+        authApplicationService.refresh(requestRefreshToken,response);
+        return ApiResponse.ok();
     }
 
     @Operation(summary = "로그아웃")
