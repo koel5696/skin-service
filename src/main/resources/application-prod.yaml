@@ -65,4 +65,4 @@ management:
       show-details: never
 app:
   cookie:
-    secure: false
+    secure: true
