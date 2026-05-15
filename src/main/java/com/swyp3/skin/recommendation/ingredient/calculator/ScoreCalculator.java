@@ -13,13 +13,13 @@ public class ScoreCalculator {
         // 각 성분군별 누적 점수
         Map<IngredientGroup, Double> result = new HashMap<>();
         // 상태 -> 성분군 매핑 테이블
-        Map<SkinState, Map<IngredientGroup, Double>> mapping = ScoreMapping.getMapping();
+        Map<SkinState, Map<IngredientGroup, Double>> mapping = ScoreMapping.MAPPING;
 
         for (SkinState state : stateVector.keySet()) {
             // 해당 상태의 점수 => ex.DRYNESS = 70
             int stateScore = stateVector.get(state);
 
-            // 해당 상태가 영향을 주는 성분군 목록(ScoreMapping참고)
+            // 해당 상태가 영향을 주는 성분군 목록(ScoreMapping)
             Map<IngredientGroup, Double> targets = mapping.get(state);
             // 매핑 없으면 스킵 , 근데 그럴일 없음
             if (targets == null) continue;

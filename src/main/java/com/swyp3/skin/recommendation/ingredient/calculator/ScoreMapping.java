@@ -3,88 +3,36 @@ package com.swyp3.skin.recommendation.ingredient.calculator;
 import com.swyp3.skin.domain.common.enums.IngredientGroup;
 import com.swyp3.skin.recommendation.ingredient.model.enums.SkinState;
 
-import java.util.HashMap;
 import java.util.Map;
 
-// step 1
-public class ScoreMapping {
-    // v1
-//    public static Map<SkinState, Map<IngredientGroup, Double>> getMapping() {
-//
-//        Map<SkinState, Map<IngredientGroup, Double>> mapping = new HashMap<>();
-//
-//        // Dryness
-//        Map<IngredientGroup, Double> dryness = new HashMap<>();
-//        dryness.put(IngredientGroup.HYDRATION, 1.0);
-//        dryness.put(IngredientGroup.SOOTHING, 0.3);
-//        mapping.put(SkinState.DRYNESS, dryness);
-//
-//        // Sebum
-//        Map<IngredientGroup, Double> sebum = new HashMap<>();
-//        sebum.put(IngredientGroup.ACNE, 1.0);
-//        mapping.put(SkinState.SEBUM, sebum);
-//
-//        // Acne
-//        Map<IngredientGroup, Double> acne = new HashMap<>();
-//        acne.put(IngredientGroup.ACNE, 1.0);
-//        acne.put(IngredientGroup.SOOTHING, 0.3);
-//        mapping.put(SkinState.ACNE, acne);
-//
-//        // Sensitivity
-//        Map<IngredientGroup, Double> sensitivity = new HashMap<>();
-//        sensitivity.put(IngredientGroup.SOOTHING, 1.0);
-//        sensitivity.put(IngredientGroup.HYDRATION, 0.3);
-//        mapping.put(SkinState.SENSITIVITY, sensitivity);
-//
-//        // Pigmentation
-//        Map<IngredientGroup, Double> pigmentation = new HashMap<>();
-//        pigmentation.put(IngredientGroup.PIGMENTATION, 1.0);
-//        pigmentation.put(IngredientGroup.TURNOVER, 0.3);
-//        mapping.put(SkinState.PIGMENTATION, pigmentation);
-//
-//        return mapping;
-//    }
+public final class ScoreMapping {
 
-    public static Map<SkinState, Map<IngredientGroup, Double>> getMapping() {
-
-        Map<SkinState, Map<IngredientGroup, Double>> mapping = new HashMap<>();
-
-        // DRYNESS (건조)
-        Map<IngredientGroup, Double> dryness = new HashMap<>();
-        dryness.put(IngredientGroup.HYDRATION, 1.0);
-        dryness.put(IngredientGroup.BARRIER,   1.0);     // 장벽 강화 (핵심)
-        mapping.put(SkinState.DRYNESS, dryness);
-
-        // SEBUM (피지)
-        Map<IngredientGroup, Double> sebum = new HashMap<>();
-        sebum.put(IngredientGroup.SEBUM_CONTROL, 1.3); // 피지 조절 (핵심)
-        sebum.put(IngredientGroup.ACNE, 0.4);          // 트러블 예방 (약하게)
-        mapping.put(SkinState.SEBUM, sebum);
-
-        // ACNE (트러블)
-        Map<IngredientGroup, Double> acne = new HashMap<>();
-        acne.put(IngredientGroup.ACNE,    1.3);
-        acne.put(IngredientGroup.SOOTHING, 0.3);      // 진정
-        mapping.put(SkinState.ACNE, acne);
-
-        // SENSITIVITY (민감)
-        Map<IngredientGroup, Double> sensitivity = new HashMap<>();
-        sensitivity.put(IngredientGroup.SOOTHING, 1.25);
-        sensitivity.put(IngredientGroup.BARRIER,  0.8);  // 장벽 강화
-        mapping.put(SkinState.SENSITIVITY, sensitivity);
-
-        // PIGMENTATION (색소)
-        Map<IngredientGroup, Double> pigmentation = new HashMap<>();
-        pigmentation.put(IngredientGroup.BRIGHTENING, 1.25); // 미백/톤 개선 (핵심)
-        pigmentation.put(IngredientGroup.TURNOVER, 0.5);    // 각질/재생 보조
-        mapping.put(SkinState.PIGMENTATION, pigmentation);
-
-        // AGING (노화)
-        Map<IngredientGroup, Double> aging = new HashMap<>();
-        aging.put(IngredientGroup.ANTI_AGING, 1.4);  // 핵심 (탄력/주름 개선)
-        aging.put(IngredientGroup.TURNOVER, 0.35);    // 보조 (재생)
-        mapping.put(SkinState.AGING, aging);
-
-        return mapping;
+    private ScoreMapping() {
     }
+
+    public static final Map<SkinState, Map<IngredientGroup, Double>> MAPPING = Map.of(
+            SkinState.DRYNESS, Map.of( // DRYNESS (건조)
+                    IngredientGroup.HYDRATION, 1.0,
+                    IngredientGroup.BARRIER, 1.0 // 장벽 강화 (핵심)
+            ),
+            SkinState.SEBUM, Map.of( // SEBUM (피지)
+                    IngredientGroup.SEBUM_CONTROL, 1.3, // 피지 조절 (핵심)
+                    IngredientGroup.ACNE, 0.4 // 트러블 예방 (약하게)
+            ),
+            SkinState.ACNE, Map.of( // ACNE (트러블)
+                    IngredientGroup.ACNE, 1.3,// 진정
+                    IngredientGroup.SOOTHING, 0.3
+            ),
+            SkinState.SENSITIVITY, Map.of( // SENSITIVITY (민감)
+                    IngredientGroup.SOOTHING, 1.25, // 장벽 강화
+                    IngredientGroup.BARRIER, 0.8
+            ),
+            SkinState.PIGMENTATION, Map.of( // PIGMENTATION (색소)
+                    IngredientGroup.BRIGHTENING, 1.25, // 미백/톤 개선 (핵심)
+                    IngredientGroup.TURNOVER, 0.5 // 각질/재생 보조
+            ),
+            SkinState.AGING, Map.of( // AGING (노화)
+                    IngredientGroup.ANTI_AGING, 1.4, // 핵심 (탄력/주름 개선)
+                    IngredientGroup.TURNOVER, 0.35 // 보조 (재생)
+            ));
 }

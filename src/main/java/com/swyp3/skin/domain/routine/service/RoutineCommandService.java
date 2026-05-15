@@ -78,8 +78,7 @@ public class RoutineCommandService {
 
         return new SaveRoutineResponse(
                 routineGroup.getId(),
-                request.title(),
-                "추천 루틴이 저장되었습니다."
+                routineGroup.getTitle()
         );
     }
 
@@ -99,7 +98,6 @@ public class RoutineCommandService {
             throw new RoutineException(RoutineErrorCode.PREVIEW_RESPONSE_NOT_FOUND);
         }
 
-        //아래 두개 검증이 굳이 필요한가 싶습니다..
         if (response.amRoutine() == null || response.pmRoutine() == null) {
             throw new RoutineException(RoutineErrorCode.PREVIEW_ROUTINE_EMPTY);
         }

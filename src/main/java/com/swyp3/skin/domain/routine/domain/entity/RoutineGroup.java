@@ -1,5 +1,7 @@
 package com.swyp3.skin.domain.routine.domain.entity;
 
+import com.swyp3.skin.domain.routine.exception.RoutineErrorCode;
+import com.swyp3.skin.domain.routine.exception.RoutineException;
 import com.swyp3.skin.domain.skinresult.domain.entity.SkinResult;
 import com.swyp3.skin.domain.user.domain.entity.User;
 import com.swyp3.skin.global.entity.BaseEntity;
@@ -48,10 +50,22 @@ public class RoutineGroup extends BaseEntity {
         RoutineGroup routineGroup = new RoutineGroup();
         routineGroup.user = user;
         routineGroup.skinResult = skinResult;
-        routineGroup.title = title;
         routineGroup.skinType = skinType;
         routineGroup.subtitle = subtitle;
         routineGroup.summary = summary;
+        routineGroup.updateTitle(title);
         return routineGroup;
+    }
+
+    public void updateTitle(String title) {
+        String normalizedTitle = normalizeTitle(title);
+        if (normalizedTitle.isEmpty() || normalizedTitle.length() > 100) {
+            throw new RoutineException(RoutineErrorCode.ROUTINE_TITLE_ERROR);
+        }
+        this.title = normalizedTitle;
+    }
+
+    private String normalizeTitle(String title) {
+        return title == null ? "" : title.trim();
     }
 }
