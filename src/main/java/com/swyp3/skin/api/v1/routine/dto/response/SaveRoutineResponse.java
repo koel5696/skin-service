@@ -9,9 +9,6 @@ public record SaveRoutineResponse(
         Long routineGroupId,
 
         @Schema(description = "저장된 루틴 제목", example = "민감 피부 데일리 루틴")
-        String title,
-
-        @Schema(description = "저장 완료 메시지", example = "추천 루틴이 저장되었습니다.")
-        String message
+        String title
 ) {
 }
