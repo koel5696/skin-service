@@ -1,6 +1,7 @@
 package com.swyp3.skin.api.v1.routine.controller;
 
 import com.swyp3.skin.api.v1.routine.dto.request.SaveRoutineRequest;
+import com.swyp3.skin.api.v1.routine.dto.request.UpdateRoutineRequest;
 import com.swyp3.skin.api.v1.routine.dto.response.*;
 import com.swyp3.skin.domain.routine.dto.RoutinePreviewCacheValue;
 import com.swyp3.skin.domain.routine.service.*;
@@ -19,14 +20,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -43,6 +37,7 @@ public class RoutineController {
     private final RoutineCommandService routineCommandService;
     private final RoutineQueryService routineQueryService;
     private final RoutinePreviewCacheService routinePreviewCacheService;
+    private final RoutineUpdateService routineUpdateService;
 
     @Operation(
             summary = "맞춤형 루틴 추천",
@@ -116,5 +111,19 @@ public class RoutineController {
     ) {
         routineCommandService.deleteRoutine(routineGroupId, userDetails.userId());
         return ApiResponse.ok();
+    }
+
+    @Operation(
+            summary = "루틴 타이틀 수정",
+            description = "사용자가 입력한 타이틀을 기반으로 새롭게 수정 업데이트"
+    )
+    @PatchMapping("/{routineGroupId}")
+    public ApiResponse<UpdateRoutineResponse> updateRoutineName(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @PathVariable @Positive(message = "루틴 ID는 1 이상이어야 합니다.") Long routineGroupId,
+            @Valid @RequestBody UpdateRoutineRequest request) {
+
+        return ApiResponse.ok(routineUpdateService.update(
+                userDetails.userId(), routineGroupId, request.title()));
     }
 }
