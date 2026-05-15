@@ -2,13 +2,12 @@ package com.swyp3.skin.api.v1.routine.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 
 @Schema(description = "루틴 저장 요청")
 public record SaveRoutineRequest(
+
         @NotBlank
         @Schema(description = "사용자가 입력한 루틴 제목", example = "건조 피부 관리 루틴")
-        @Size(max = 100)
         String title,
 
         @NotBlank
