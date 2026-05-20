@@ -8,5 +8,7 @@ import java.util.List;
 public interface SkinResultGroupScoreRepository extends JpaRepository<SkinResultGroupScore, Long> {
     List<SkinResultGroupScore> findBySkinResultId(Long skinResultId);
 
+    List<SkinResultGroupScore> findBySkinResultIdOrderByPriorityAsc(Long skinResultId);
+
     List<SkinResultGroupScore> findTop2BySkinResultIdOrderByPriorityAsc(Long resultId);
 }

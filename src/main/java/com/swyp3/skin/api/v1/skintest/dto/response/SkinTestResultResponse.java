@@ -1,5 +1,6 @@
 package com.swyp3.skin.api.v1.skintest.dto.response;
 
+import com.swyp3.skin.domain.common.enums.IngredientGroup;
 import com.swyp3.skin.recommendation.ux.IngredientMeta;
 import com.swyp3.skin.recommendation.ux.SkinUxProfile;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -28,12 +29,16 @@ public record SkinTestResultResponse(
         String subSummary,
 
         @Schema(description = "추천 성분 및 설명")
-        List<IngredientMeta> ingredientMetas
+        List<IngredientMeta> ingredientMetas,
+
+        @Schema(description = "성분군별 UX용 점수")
+        List<IngredientGroupScoreResponse> ingredientGroupScores
 ) {
         public static SkinTestResultResponse of(
                 String diagnosedAt,
                 SkinUxProfile uxProfile,
-                List<IngredientMeta> ingredientMetas
+                List<IngredientMeta> ingredientMetas,
+                List<IngredientGroupScoreResponse> ingredientGroupScores
         ){
                 return new SkinTestResultResponse(
                         diagnosedAt,
@@ -42,7 +47,21 @@ public record SkinTestResultResponse(
                         uxProfile.summary(),
                         uxProfile.concerns(),
                         uxProfile.routineSummary(),
-                        ingredientMetas
+                        ingredientMetas,
+                        ingredientGroupScores
                 );
+        }
+
+        @Schema(description = "성분군별 UX용 점수 응답")
+        public record IngredientGroupScoreResponse(
+                @Schema(description = "성분군", example = "HYDRATION")
+                IngredientGroup ingredientGroup,
+
+                @Schema(description = "성분군 한글명", example = "수분 공급")
+                String ingredientGroupName,
+
+                @Schema(description = "UX 표시용 점수. 같은 진단 결과 안에서 최저 0, 최고 100으로 변환됩니다.", example = "86")
+                int score
+        ) {
         }
 }
