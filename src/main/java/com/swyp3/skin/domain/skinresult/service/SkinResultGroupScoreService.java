@@ -46,4 +46,8 @@ public class SkinResultGroupScoreService {
     public List<SkinResultGroupScore> getTop2ScoresByResultId(Long resultId) {
         return skinResultGroupScoreRepository.findTop2BySkinResultIdOrderByPriorityAsc(resultId);
     }
+
+    public List<SkinResultGroupScore> getScoresByResultId(Long resultId) {
+        return skinResultGroupScoreRepository.findBySkinResultIdOrderByPriorityAsc(resultId);
+    }
 }
