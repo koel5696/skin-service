@@ -34,7 +34,7 @@ public record SkinTestResultResponse(
         @Schema(description = "성분군별 UX용 점수")
         List<IngredientGroupScoreResponse> ingredientGroupScores,
 
-        @Schema(description = "피부 진단 결과에 대한 루틴 id")
+        @Schema(description = "유저의 피부 진단 결과에 대한 routineGroup_id")
         Long routineGroupId
 
 ) {
