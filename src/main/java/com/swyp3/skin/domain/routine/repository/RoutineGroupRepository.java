@@ -13,4 +13,5 @@ public interface RoutineGroupRepository extends JpaRepository<RoutineGroup, Long
     List<RoutineGroup> findByUser_IdAndIdLessThanOrderByIdDesc(Long userId, Long cursor, Pageable pageable);
     Optional<RoutineGroup> findByIdAndUser_Id(Long routineGroupId, Long userId);
     Optional<RoutineGroup> findTopByUser_IdOrderByCreatedAtDesc(Long userId);
+    Optional<RoutineGroup> findByUser_IdAndSkinResult_Id(Long userId, Long skinResultId);
 }

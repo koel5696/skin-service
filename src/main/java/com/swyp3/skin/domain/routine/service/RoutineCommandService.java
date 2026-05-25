@@ -61,8 +61,14 @@ public class RoutineCommandService {
     public SaveRoutineResponse save(CustomUserDetails userDetails, SaveRoutineRequest request) {
         RoutineRecommendationResponse response = resolveRoutineData(userDetails, request);
 
+        routineGroupRepository.findByUser_IdAndSkinResult_Id(userDetails.userId(), response.skinResultId())
+                .ifPresent(routineGroup -> {
+                    throw new RoutineException(RoutineErrorCode.DUPLICATE_ROUTINE_FOR_SKIN_RESULT);
+                });
+
         User user = userService.findById(userDetails.userId());
         SkinResult skinResult = skinResultService.getSkinResultById(response.skinResultId(), userDetails.userId());
+
 
         RoutineGroup routineGroup = routineGroupRepository.save(RoutineGroup.of(
                 user,
