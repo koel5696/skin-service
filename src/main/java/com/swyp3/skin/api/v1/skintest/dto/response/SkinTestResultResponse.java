@@ -32,13 +32,18 @@ public record SkinTestResultResponse(
         List<IngredientMeta> ingredientMetas,
 
         @Schema(description = "성분군별 UX용 점수")
-        List<IngredientGroupScoreResponse> ingredientGroupScores
+        List<IngredientGroupScoreResponse> ingredientGroupScores,
+
+        @Schema(description = "피부 진단 결과에 대한 루틴 id")
+        Long routineGroupId
+
 ) {
         public static SkinTestResultResponse of(
                 String diagnosedAt,
                 SkinUxProfile uxProfile,
                 List<IngredientMeta> ingredientMetas,
-                List<IngredientGroupScoreResponse> ingredientGroupScores
+                List<IngredientGroupScoreResponse> ingredientGroupScores,
+                Long routineGroupId
         ){
                 return new SkinTestResultResponse(
                         diagnosedAt,
@@ -48,7 +53,8 @@ public record SkinTestResultResponse(
                         uxProfile.concerns(),
                         uxProfile.routineSummary(),
                         ingredientMetas,
-                        ingredientGroupScores
+                        ingredientGroupScores,
+                        routineGroupId
                 );
         }
 
