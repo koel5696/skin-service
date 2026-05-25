@@ -2,6 +2,8 @@ package com.swyp3.skin.api.v1.skintest.mapper;
 
 import com.swyp3.skin.api.v1.skintest.dto.response.SkinTestResultResponse;
 import com.swyp3.skin.domain.common.enums.IngredientGroup;
+import com.swyp3.skin.domain.routine.domain.entity.RoutineGroup;
+import com.swyp3.skin.domain.routine.repository.RoutineGroupRepository;
 import com.swyp3.skin.domain.skinresult.domain.entity.SkinResult;
 import com.swyp3.skin.domain.skinresult.domain.entity.SkinResultGroupScore;
 import com.swyp3.skin.domain.skinresult.service.SkinResultGroupScoreService;
@@ -29,18 +31,24 @@ public class SkinTestResultResponseMapper {
 
     private final SkinProfileService skinProfileService;
     private final SkinResultGroupScoreService skinResultGroupScoreService;
+    private final RoutineGroupRepository routineGroupRepository;
 
-    public SkinTestResultResponse toResponse(SkinResult skinResult) {
+    public SkinTestResultResponse toResponse(SkinResult skinResult, Long user_Id) {
         SkinUxProfile profile = skinProfileService.getProfile(skinResult.getId());
         List<IngredientMeta> ingredientMetas = getIngredientMetas(profile);
         List<SkinTestResultResponse.IngredientGroupScoreResponse> ingredientGroupScores =
                 getIngredientGroupScores(skinResult.getId());
 
+        Long RoutineGroup_Id = routineGroupRepository.findByUser_IdAndSkinResult_Id(user_Id, skinResult.getId())
+                .map(RoutineGroup::getId)
+                .orElse(null);
+
         return SkinTestResultResponse.of(
                 formatToKstDate(skinResult.getDiagnosedAt()),
                 profile,
                 ingredientMetas,
-                ingredientGroupScores
+                ingredientGroupScores,
+                RoutineGroup_Id
         );
     }
 
