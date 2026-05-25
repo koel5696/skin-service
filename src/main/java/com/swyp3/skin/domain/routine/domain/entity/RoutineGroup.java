@@ -11,6 +11,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(
+        uniqueConstraints = @UniqueConstraint(
+                name = "uk_routine_group_user_skin_result",
+                columnNames = {"user_id", "skin_result_id"}
+        )
+)
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RoutineGroup extends BaseEntity {
