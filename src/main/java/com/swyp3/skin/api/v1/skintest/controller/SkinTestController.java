@@ -106,7 +106,7 @@ public class SkinTestController {
     ) {
         SkinResult skinResult = skinResultService.getSkinResultById(resultId, customUserDetails.userId());
         SkinTestResultResponse response =
-                resultResponseMapper.toResponse(skinResult);
+                resultResponseMapper.toResponse(skinResult, customUserDetails.userId());
 
         return ApiResponse.ok(response);
     }
