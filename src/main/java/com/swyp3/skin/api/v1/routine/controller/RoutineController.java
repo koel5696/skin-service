@@ -4,6 +4,7 @@ import com.swyp3.skin.api.v1.routine.dto.request.SaveRoutineRequest;
 import com.swyp3.skin.api.v1.routine.dto.request.UpdateRoutineRequest;
 import com.swyp3.skin.api.v1.routine.dto.response.*;
 import com.swyp3.skin.domain.routine.dto.RoutinePreviewCacheValue;
+import com.swyp3.skin.domain.routine.repository.RoutineGroupRepository;
 import com.swyp3.skin.domain.routine.service.*;
 import com.swyp3.skin.domain.skinresult.domain.entity.SkinResult;
 import com.swyp3.skin.domain.skinresult.service.SkinResultService;
@@ -36,6 +37,7 @@ public class RoutineController {
     private final RoutineRecommendationService routineRecommendationService;
     private final RoutineCommandService routineCommandService;
     private final RoutineQueryService routineQueryService;
+    private final RoutineGroupRepository routineGroupRepository;
     private final RoutinePreviewCacheService routinePreviewCacheService;
     private final RoutineUpdateService routineUpdateService;
 
@@ -52,11 +54,14 @@ public class RoutineController {
         SkinResult skinResult = (skinResultId != null)
                 ? skinResultService.getSkinResultById(skinResultId, userId)
                 : skinResultService.getLatestByUserId(userId);
+
         List<RecommendedProduct> recommended = productRecommendationService.recommend(skinResult.getId());
         RoutineRecommendationResponse response = routineRecommendationService.recommend(recommended, skinResult);
-        String previewToken = routinePreviewCacheService.put(new RoutinePreviewCacheValue(userId, response));
 
-        return ApiResponse.ok(new RoutineRecommendationWithTokenResponse(response, previewToken));
+        boolean alreadySaved = routineGroupRepository.existsByUser_IdAndSkinResult_Id(userId, response.skinResultId());
+        String previewToken = alreadySaved ? null : routinePreviewCacheService.put(new RoutinePreviewCacheValue(userId, response));
+
+        return ApiResponse.ok(new RoutineRecommendationWithTokenResponse(response, previewToken, alreadySaved));
     }
 
     @Operation(
