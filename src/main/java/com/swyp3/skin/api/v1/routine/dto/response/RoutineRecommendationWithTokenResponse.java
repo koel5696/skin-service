@@ -8,6 +8,9 @@ public record RoutineRecommendationWithTokenResponse(
         RoutineRecommendationResponse recommendation,
 
         @Schema(description = "저장 시 사용하는 루틴 미리보기 토큰", example = "3f8e4f3f-54d8-4a21-a20f-0fce8d2cc9a1")
-        String previewToken
+        String previewToken,
+
+        @Schema(description = "이미 저장된 루틴 여부")
+        boolean alreadySaved
 ) {
 }
