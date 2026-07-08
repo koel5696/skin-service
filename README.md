@@ -22,10 +22,8 @@
 <img width="8000" height="4500" alt="SWYP 3팀 최종 발표_page-0011" src="https://github.com/user-attachments/assets/871ddeea-f2ad-4225-974b-b9ecf562b144" />
 <img width="8000" height="4500" alt="SWYP 3팀 최종 발표_page-0012" src="https://github.com/user-attachments/assets/05bd4bce-efee-47f3-ae82-1752e1987ba3" />
 <img width="8000" height="4500" alt="SWYP 3팀 최종 발표_page-0013" src="https://github.com/user-attachments/assets/93b43ee7-9228-42b9-9ef5-3a9e65bd17d5" />
-<img width="8000" height="4500" alt="SWYP 3팀 최종 발표_page-0014" src="https://github.com/user-attachments/assets/52e8b7c0-187a-4e9b-aa9c-4e018d3668b0" />
 <img width="8000" height="4500" alt="SWYP 3팀 최종 발표_page-0015" src="https://github.com/user-attachments/assets/f59e1fa4-519e-4c73-b579-2393bda99565" />
 <img width="8000" height="4500" alt="SWYP 3팀 최종 발표_page-0016" src="https://github.com/user-attachments/assets/b90659fb-9582-49d5-9f7e-fc2a540adc31" />
-<img width="8000" height="4500" alt="SWYP 3팀 최종 발표_page-0017" src="https://github.com/user-attachments/assets/b80e3bba-fd1c-46d5-bc6e-098cecd37150" />
 
 ## 2. Problem & Solution
 
