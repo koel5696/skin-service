@@ -83,7 +83,6 @@
 ## 5. System Architecture
 <img width="1536" height="1024" alt="swyp_system_architecture" src="https://github.com/user-attachments/assets/e8203d7a-1eb4-49ca-9e0c-6e7af7cdc2b4" />
 
-
 ### 6. organization & team
 - SWYP 웹 13기 참여
 - Designer - 조민지
