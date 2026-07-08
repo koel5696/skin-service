@@ -1,6 +1,6 @@
 <h1 align="center">Layer'd</h1>
 <p align="center">
-  피부 상태 기반 성분 · 제품 · 루틴 추천 시스템
+  <strong>피부 상태 기반 성분 · 제품 · 루틴 추천 시스템</strong>
 </p>
 
 ## 1. Overview
@@ -83,8 +83,8 @@
 ## 5. System Architecture
 <img width="1536" height="1024" alt="swyp_system_architecture" src="https://github.com/user-attachments/assets/e8203d7a-1eb4-49ca-9e0c-6e7af7cdc2b4" />
 
-### 6. organization & team
-- SWYP 웹 13기 참여
+## 6. organization & team
+- **SWYP 웹 13기 참여**
 - Designer - 조민지
 - frontend Developer - 문다영
-- Backend Developer - 김민서, 윤민수, 전시
+- Backend Developer - 김민서, 윤민수, 전시언
