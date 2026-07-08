@@ -1,4 +1,4 @@
-<img width="1536" height="1024" alt="swyp_system_architecture" src="https://github.com/user-attachments/assets/61eed2e5-d4ac-43cd-81e8-5d0df15f453c" /><h1 align="center">Layer'd</h1>
+<h1 align="center">Layer'd</h1>
 <p align="center">
   피부 상태 기반 성분 · 제품 · 루틴 추천 시스템
 </p>
