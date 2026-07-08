@@ -1,4 +1,4 @@
-<h1 align="center">Layer'd</h1>
+<img width="1536" height="1024" alt="swyp_system_architecture" src="https://github.com/user-attachments/assets/61eed2e5-d4ac-43cd-81e8-5d0df15f453c" /><h1 align="center">Layer'd</h1>
 <p align="center">
   피부 상태 기반 성분 · 제품 · 루틴 추천 시스템
 </p>
@@ -80,4 +80,12 @@
 ![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white)
 ![Discord](https://img.shields.io/badge/Discord-%235865F2.svg?style=for-the-badge&logo=discord&logoColor=white)
 
-### Infrastructure
+## 5. System Architecture
+<img width="1536" height="1024" alt="swyp_system_architecture" src="https://github.com/user-attachments/assets/e8203d7a-1eb4-49ca-9e0c-6e7af7cdc2b4" />
+
+
+### 6. organization & team
+- SWYP 웹 13기 참여
+- Designer - 조민지
+- frontend Developer - 문다영
+- Backend Developer - 김민서, 윤민수, 전시
